@@ -1,0 +1,23 @@
+pkgname=samdump2
+groups=(blackarch blackarch-password-attacks)
+pkgver=3.0.0
+pkgrel=2
+pkgdesc="Dump password hashes from a Windows NT/2k/XP installation"
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/ophcrack/files/samdump2/"
+license=('GPL')
+depends=('openssl')
+source=("http://downloads.sourceforge.net/ophcrack/$pkgname-$pkgver.tar.bz2"
+        'prefix-infos.patch')
+md5sums=('5dac2dc3f8171a3dc86053d923a0e6f5'
+         '9652a003668d4dcf2711e397f5f8ec7f')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -p0 < "$srcdir/prefix-infos.patch"
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make LIBS=-lcrypto install DESTDIR="$pkgdir"
+}

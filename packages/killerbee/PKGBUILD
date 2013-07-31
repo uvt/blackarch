@@ -1,0 +1,29 @@
+pkgname=killerbee
+pkgrel=2
+pkgver=64
+pkgdesc="Framework and tools for exploiting ZigBee and IEEE 802.15.4 networks."
+groups=(blackarch blackarch-wireless)
+arch=('i686' 'x86_64')
+url="https://code.google.com/p/${pkgname}/"
+license=('BSD')
+depends=('python2' 'python2-crypto' 'python2-pyusb')
+conflicts=('killerbee-svn')
+provides=('killerbee-svn')
+options=(!emptydirs)
+source=("svn+http://${pkgname}.googlecode.com/svn/trunk/")
+md5sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/trunk"
+  svnversion | tr -d [A-z]
+}
+
+prepare() {
+  cd "${srcdir}/trunk/${pkgname}"
+  sed -i 's|#!/usr/bin/env python|#!/usr/bin/env python2|' tools/*
+}
+
+package() {
+  cd "${srcdir}/trunk/${pkgname}"
+  python2 setup.py install --root="${pkgdir}/" --optimize=1
+}

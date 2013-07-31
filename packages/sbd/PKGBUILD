@@ -1,0 +1,34 @@
+pkgname=sbd
+pkgver=1.36
+pkgrel=3
+groups=(blackarch blackarch-intel)
+pkgdesc="Netcat-clone, portable, offers strong encryption - features AES-128-CBC + HMAC-SHA1 encryption, program execution (-e), choosing source port, continuous reconnection with delay + more"
+url="http://www2.packetstormsecurity.org/cgi-bin/search/search.cgi?searchvalue=sbd"
+arch=('i686' 'x86_64')
+license=('GPL')
+source=("http://dl.packetstormsecurity.net/UNIX/netcat/${pkgname}-${pkgver}.tar.gz")
+md5sums=('866d1bf2fe156bbaf94bfcec2014767e')
+sha1sums=('859f2c4ae4af8ad2d5ad258d10d5a7174139cfbb')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  make unix
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  # Make base directory structure.
+  install -d ${pkgdir}/usr/bin
+  install -d ${pkgdir}/usr/share/doc/${pkgname}
+  install -d ${pkgdir}/usr/share/licenses/${pkgname}
+
+  # Install program.
+  install -Dm755 $srcdir/$pkgname-$pkgver/$pkgname $pkgdir/usr/bin/$pkgname
+
+  # Install documents.
+  install -Dm644 README $pkgdir/usr/share/doc/$pkgname/README
+  install -Dm644 CHANGES $pkgdir/usr/share/doc/$pkgname/CHANGES
+  install -Dm644 COPYING $pkgdir/usr/share/licenses/$pkgname/COPYING
+}

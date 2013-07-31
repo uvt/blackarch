@@ -1,10 +1,10 @@
 pkgname=tcpjunk
 pkgver=2.9.03
-pkgrel=1
-pkgdesc="a general tcp protocols testing and hacking utility"
-arch=("$CARCH")
+pkgrel=2
+pkgdesc="A general tcp protocols testing and hacking utility"
+arch=('x86_64' 'i686')
 groups=('blackarch-analysis' 'blackarch')
-url=('http://code.google.com/p/tcpjunk')
+url='http://code.google.com/p/tcpjunk'
 license=('GPL2')
 source=("http://tcpjunk.googlecode.com/files/${pkgname}-${pkgver}.tar.gz")
 depends=('gtksourceview2')

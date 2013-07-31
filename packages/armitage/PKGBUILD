@@ -1,0 +1,41 @@
+pkgname=armitage
+pkgver=841
+groups=(blackarch blackarch-exploitation)
+pkgrel=2
+pkgdesc="A graphical cyber attack management tool for Metasploit"
+url="http://www.fastandeasyhacking.com/"
+arch=('any')
+license=('GPL')
+depends=('metasploit' 'java-environment')
+makedepends=('apache-ant' 'zip' 'unzip' 'subversion')
+provides=('armitage')
+install=armitage.install
+source=('armitage.install'
+        'svn+http://armitage.googlecode.com/svn/trunk/')
+md5sums=('5234326f9ff41ff8694cb35a557af895'
+         'SKIP')
+
+prepare() {
+  cd "$srcdir/trunk"
+  sed -i 's|/usr/share/java/apache-ant/bin/||g' package.sh
+}
+
+build() {
+  cd "$srcdir/trunk"
+  bash package.sh
+}
+
+package() {
+  # Base directories.
+  install -dm755 "$pkgdir/opt/$pkgname"
+  install -dm755 "$pkgdir/usr/bin"
+
+  # Joint script.
+  cat > "$pkgdir/usr/bin/$pkgname" <<EOF
+#!/bin/sh
+java -jar /opt/$pkgname/$pkgname.jar
+EOF
+
+  # Everything else.
+  tar -xzf "$srcdir/trunk/$pkgname.tgz" -C "$pkgdir/opt"
+}

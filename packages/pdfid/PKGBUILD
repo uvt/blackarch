@@ -1,0 +1,15 @@
+pkgname=pdfid
+pkgver=0.1.2
+pkgrel=2
+pkgdesc="scan a file to look for certain PDF keywords"
+arch=(any)
+groups=('blackarch-forensics' 'blackarch')
+url='http://blog.didierstevens.com/programs/pdf-tools/'
+license=('Unknown')
+source=("http://didierstevens.com/files/software/${pkgname}_v0_1_2.zip")
+depends=('python2')
+md5sums=('60fc17757201f014a6ada0744b74a740')
+
+package() {
+  cd "${srcdir}"
+}

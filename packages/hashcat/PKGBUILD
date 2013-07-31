@@ -1,0 +1,42 @@
+pkgname=hashcat
+pkgver=0.46
+groups=(blackarch blackarch-password-attacks)
+pkgrel=6
+pkgdesc="A multithreaded cross platform hash cracker."
+arch=('i686' 'x86_64')
+url='http://hashcat.net/hashcat/'
+license=('custom')
+makedepends=('p7zip')
+depends=('glibc')
+source=("https://hashcat.net/files/${pkgname}-${pkgver}.7z")
+md5sums=('0721adddc809b3b08332ee50ae325774')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  if [[ "$CARCH" == 'x86_64' ]]; then
+    mv hashcat-cli64.bin hashcat
+  else
+    mv hashcat-cli32.bin hashcat
+  fi
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  rm *.{exe,bin,app}
+
+  install -dm755 "${pkgdir}/usr/share/doc/${pkgname}"
+  install -dm755 "${pkgdir}/etc/${pkgname}"
+
+  install -Dm755 hashcat "${pkgdir}/usr/bin/${pkgname}"
+
+  cp -dpr --no-preserve=ownership "${srcdir}/${pkgname}-${pkgver}"/{rules,salts,tables} "${pkgdir}"/etc/"${pkgname}"/
+  cp -dpr --no-preserve=ownership "${srcdir}/${pkgname}-${pkgver}"/examples "${pkgdir}"/usr/share/doc/"${pkgname}"/
+
+  # Fix permissions.
+  cd "${pkgdir}"
+  find . -type d -exec chmod 755 {} \+
+  find . -type f -exec chmod 644 {} \+
+  chmod a+x "${pkgdir}/usr/bin/hashcat"
+}

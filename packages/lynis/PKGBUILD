@@ -1,0 +1,31 @@
+pkgname=lynis
+pkgver=1.3.0
+pkgrel=3
+groups=(blackarch blackarch-analysis)
+pkgdesc="An auditing tool for Unix (specialists)"
+url='http://www.rootkit.nl/projects/lynis.html'
+license=('GPL3')
+arch=('i686' 'x86_64')
+source=("http://www.rootkit.nl/files/$pkgname-$pkgver.tar.gz")
+md5sums=('cb74fbf73b3dc42f838eaedd3ce9f738')
+
+package() {
+  cd $pkgname-$pkgver
+
+  # Install profile.
+  install -Dm 644 default.prf "$pkgdir/etc/$pkgname/default.prf"
+
+  # Install binary.
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+
+  # Install plugins, include, db.
+  install -d "$pkgdir/usr/share/$pkgname"
+  cp -a db include plugins "$pkgdir/usr/share/$pkgname"
+  chmod -R u=rwX,go=rX "$pkgdir/usr/share/$pkgname"
+
+  # Install misc files.
+  install -m 644 -t "$pkgdir/usr/share/$pkgname" README INSTALL CHANGELOG FAQ
+
+  # Install manpage.
+  install -Dm 644 $pkgname.8 "$pkgdir/usr/share/man/man8/$pkgname.8"
+}

@@ -12,6 +12,7 @@ trunk/
 *.tmp
 tags
 
+*.part
 *.7z
 *.asc
 *.bz2
@@ -35,3 +36,4 @@ tags
 *.xpi
 *.xz
 *.zip
+*.key

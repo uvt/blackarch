@@ -1,15 +1,27 @@
 pkgname=nikto
+groups=(blackarch blackarch-analysis blackarch-web-apps)
 pkgver=2.1.5
-pkgrel=1
-pkgdesc="a web server scanner which performs comprehensive tests against web servers for multiple items"
-arch=("$CARCH")
-groups=('blackarch-intel' 'blackarch')
-url=('http://cirt.net/nikto2/')
+pkgrel=3
+pkgdesc="A web server scanner which performs comprehensive tests against web servers for multiple items"
+url='http://www.cirt.net/nikto2'
 license=('GPL')
-source=('http://cirt.net/nikto/nikto-2.1.5.tar.gz')
-depends=('perl' 'perl-io-socket-ssl')
-md5sums=('efcc98a918becb77471ee9a5df0a7b1e')
+arch=('any')
+depends=('perl' 'openssl' 'perl-net-ssleay')
+install=$pkgname.install
+source=(http://www.cirt.net/nikto/$pkgname-$pkgver.tar.gz
+        nikto.sh)
+md5sums=('efcc98a918becb77471ee9a5df0a7b1e'
+         'eb7b704c8bdae28af9a0353764d0b552')
 
 package() {
-  cd "${srcdir}"/${pkgname}-${pkgver}
+  cd $srcdir/$pkgname-$pkgver
+
+  install -dm755 $pkgdir/usr/share/nikto
+
+  cp --no-preserve=ownership -R * $pkgdir/usr/share/nikto
+
+  # Fix permissions.
+  find $pkgdir/usr/share/nikto -type f -exec chmod 644 '{}' \;
+
+  install -Dm 755 $srcdir/nikto.sh $pkgdir/usr/bin/nikto
 }
